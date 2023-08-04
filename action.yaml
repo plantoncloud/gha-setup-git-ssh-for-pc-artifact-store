@@ -22,6 +22,7 @@ runs:
         echo "fetching git ssh key from planton cloud service"
         ssh_key_file_path="$(pwd)/ssh_key"
         planton artifact-store secrets get-git-ssh-key --output-file $ssh_key_file_path --artifact-store-id ${{ inputs.planton_cloud_artifact_store_id }}
+        chmod 600 $ssh_key_file_path
         echo "SSH_KEY_FILE_PATH=$ssh_key_file_path" >> $GITHUB_ENV
         echo "fetched git ssh key from planton cloud service"
       shell: bash
