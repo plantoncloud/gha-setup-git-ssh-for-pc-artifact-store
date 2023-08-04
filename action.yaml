@@ -28,6 +28,7 @@ runs:
       shell: bash
 
     - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-        ssh-private-key: $(cat ${{ env.SSH_KEY_FILE_PATH }})
+      uses: shimataro/ssh-key-action@v2
+        with:
+          key: $(cat ${{ env.SSH_KEY_FILE_PATH }})
+          if_key_exists: replace
