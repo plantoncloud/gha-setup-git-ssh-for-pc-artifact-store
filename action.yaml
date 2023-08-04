@@ -26,12 +26,7 @@ runs:
         echo "fetched git ssh key from planton cloud service"
       shell: bash
 
-    - name: Setup SSH known hosts
-      uses: webfactory/ssh-known-hosts@v1
-      with:
-        hosts: github.com gitlab.com
-
     - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.5.3
+      uses: webfactory/ssh-agent@v0.8.0
       with:
         ssh-private-key: ${{ env.SSH_KEY }}
