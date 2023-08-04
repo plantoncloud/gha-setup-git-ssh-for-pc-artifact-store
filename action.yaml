@@ -24,5 +24,6 @@ runs:
         planton artifact-store secrets get-git-ssh-key --output-file $ssh_key_file_path --artifact-store-id ${{ inputs.planton_cloud_artifact_store_id }}
         echo "fetched git ssh key from planton cloud service"
         chmod 600 $ssh_key_file_path
-        ssh-add id_rsa
+        mkdir -p ${HOME}/.ssh
+        mv $ssh_key_file_path ${HOME}/.ssh/id_rsa 
       shell: bash
