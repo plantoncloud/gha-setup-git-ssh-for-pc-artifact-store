@@ -1,0 +1,37 @@
+name: Configure Git and SSH
+description: 'Configures Git to use SSH instead of HTTPS and sets up SSH agent for private repo access.'
+
+inputs:
+  planton_cloud_artifact_store_id:
+    description: 'ID of the Artifact Store on Planton Cloud.'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Configure Git for GitHub
+      run: git config --global url."git@github.com:".insteadOf "https://github.com/"
+      shell: bash
+
+    - name: Configure Git for GitLab
+      run: git config --global url."git@gitlab.com:".insteadOf "https://gitlab.com/"
+      shell: bash
+
+    - name: Fetch Git SSH Key
+      run: |
+        echo "fetching git ssh key from planton cloud service"
+        ssh_key_file_path="$(pwd)/ssh_key"
+        planton artifact-store secrets get-git-ssh-key --output-file $ssh_key_file_path --artifact-store-id ${{ inputs.planton_cloud_artifact_store_id }}
+        echo "SSH_KEY=$(cat $ssh_key_file_path)" >> $GITHUB_ENV
+        echo "fetched git ssh key from planton cloud service"
+      shell: bash
+
+    - name: Setup SSH known hosts
+      uses: webfactory/ssh-known-hosts@v1
+      with:
+        hosts: github.com gitlab.com
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ env.SSH_KEY }}
