@@ -32,3 +32,4 @@ runs:
       with:
         key: $(cat ${{ env.SSH_KEY_FILE_PATH }})
         if_key_exists: replace
+        known_hosts: unnecessary
