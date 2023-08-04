@@ -17,19 +17,12 @@ runs:
       run: git config --global url."git@gitlab.com:".insteadOf "https://gitlab.com/"
       shell: bash
 
-    - name: Fetch Git SSH Key
+    - name: Fetch Git SSH Key & Add to SSH Agent
       run: |
-        echo "fetching git ssh key from planton cloud service"
         ssh_key_file_path="$(pwd)/ssh_key"
+        echo "fetching git ssh key from planton cloud service"
         planton artifact-store secrets get-git-ssh-key --output-file $ssh_key_file_path --artifact-store-id ${{ inputs.planton_cloud_artifact_store_id }}
-        chmod 600 $ssh_key_file_path
-        echo "SSH_PRIVATE_KEY=$(cat $ssh_key_file_path)" >> $GITHUB_ENV
         echo "fetched git ssh key from planton cloud service"
+        chmod 600 $ssh_key_file_path
+        ssh-add id_rsa
       shell: bash
-
-    - name: Setup SSH
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ env.SSH_PRIVATE_KEY }}
-        if_key_exists: replace
-        known_hosts: unnecessary
