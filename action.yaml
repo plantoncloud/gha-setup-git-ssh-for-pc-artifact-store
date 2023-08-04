@@ -29,6 +29,6 @@ runs:
 
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
-        with:
-          key: $(cat ${{ env.SSH_KEY_FILE_PATH }})
-          if_key_exists: replace
+      with:
+        key: $(cat ${{ env.SSH_KEY_FILE_PATH }})
+        if_key_exists: replace
